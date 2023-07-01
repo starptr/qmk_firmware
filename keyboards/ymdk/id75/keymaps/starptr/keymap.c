@@ -1,3 +1,5 @@
+#include "keycodes.h"
+#include "keymap_steno.h"
 #include QMK_KEYBOARD_H
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -9,6 +11,7 @@ enum layer_names {
     NO_TAP_HOLD,
     //KEYPAD,
     DIR,
+    STENO,
     //DEV,
     FN,
 };
@@ -71,17 +74,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
         KC_GRV,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       KC_MINS,    KC_EQL,     KC_BSPC,    _______ ,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,    _______ ,
-        KC_CAPS,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,       KC_H,       KC_J,       KC_K,       KC_L,       KC_SCLN,    KC_QUOT,    KC_ENT,     _______,    _______ ,
-        KC_LSFT,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,    KC_RSFT,    _______,     KC_UP,     _______ ,
-        KC_LCTL,    KC_ESC,     KC_LALT,    KC_LGUI,    KC_SPC,     KC_SPC,     KC_SPC,     KC_SPC,     KC_RGUI,    KC_RALT,    KC_RCTL,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
+        KC_CAPS,    H_SFTA,     H_ALTS,     H_DIRD,     H_CTLF,     KC_G,       KC_H,       H_CTLJ,     H_DIRK,     H_ALTL,     H_SFTSCLN,  KC_QUOT,    KC_ENT,     _______,    _______ ,
+        _______,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,    _______,    _______,     KC_UP,     _______ ,
+        _______,    KC_ESC,     TG(STENO),  _______,    KC_LGUI,    KC_SPC,     KC_BSPC,    KC_SPC,     KC_RGUI,    _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
     ),
 	[NO_TAP_HOLD] = LAYOUT_ortho_5x15(
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
-        KC_GRV,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       KC_MINS,    KC_EQL,     KC_BSPC,    _______ ,
-        KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,    _______ ,
-        KC_CAPS,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,       KC_H,       KC_J,       KC_K,       KC_L,       KC_SCLN,    KC_QUOT,    KC_ENT,     _______,    _______ ,
-        KC_LSFT,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,    KC_RSFT,    _______,     KC_UP,     _______ ,
-        KC_LCTL,    KC_ESC,     KC_LALT,    KC_LGUI,    KC_SPC,     KC_SPC,     KC_SPC,     KC_SPC,     KC_RGUI,    KC_RALT,    KC_RCTL,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    KC_A,       KC_S,       KC_D,       KC_F,       _______,    _______,    KC_J,       KC_K,       KC_L,       KC_SCLN,    _______,    _______,    _______,    _______ ,
+        KC_LSFT,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    KC_RSFT,    _______,    _______,    _______ ,
+        KC_LCTL,    _______,    _______,    KC_LALT,    _______,    _______,    _______,    _______,    _______,    KC_RALT,    KC_RCTL,    MO(FN),     _______,    _______,    _______
+    ),
+    [DIR] = LAYOUT_ortho_5x15(
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    _______,    _______,    KC_LEFT,    KC_DOWN,      KC_UP,   KC_RIGHT,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______
+    ),
+    [STENO] = LAYOUT_ortho_5x15(
+    /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
+        _______,    STN_N1,     STN_N2,     STN_N3,     STN_N4,     _______,    _______,    STN_N6,     STN_N7,     STN_N8,     STN_N9,     _______,    _______,    _______,    _______ ,
+        _______,    STN_S1,     STN_TL,     STN_PL,     STN_HL,     STN_ST1,    STN_ST3,    STN_FR,     STN_PR,     STN_LR,     STN_TR,     STN_DR,     _______,    _______,    _______ ,
+        _______,    STN_S2,     STN_KL,     STN_WL,     STN_RL,     STN_ST2,    STN_ST4,    STN_RR,     STN_BR,     STN_GR,     STN_SR,     STN_ZR,     _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    TG(STENO),  _______,    STN_A,      STN_O,      STN_E,      STN_U,      _______,    _______,    _______,    _______,    _______,    _______,    _______
     ),
 	[FN] = LAYOUT_ortho_5x15(
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
