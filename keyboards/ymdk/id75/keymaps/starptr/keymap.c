@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,    _______ ,
         KC_CAPS,    H_SFTA,     H_ALTS,     H_DIRD,     H_CTLF,     KC_G,       KC_H,       H_CTLJ,     H_DIRK,     H_ALTL,     H_SFTSCLN,  KC_QUOT,    KC_ENT,     _______,    _______ ,
         _______,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,    _______,    _______,     KC_UP,     _______ ,
-        _______,    KC_ESC,     TG(STENO),  _______,    KC_LGUI,    KC_SPC,     KC_BSPC,    KC_SPC,     KC_RGUI,    _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
+        _______,    KC_ESC,     TG(STENO),  KC_LGUI,    KC_SPC,     KC_SPC,     KC_BSPC,    KC_SPC,     KC_RGUI,    _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
     ),
 	[NO_TAP_HOLD] = LAYOUT_ortho_5x15(
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
         _______,    KC_A,       KC_S,       KC_D,       KC_F,       _______,    _______,    KC_J,       KC_K,       KC_L,       KC_SCLN,    _______,    _______,    _______,    _______ ,
         KC_LSFT,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    KC_RSFT,    _______,    _______,    _______ ,
-        KC_LCTL,    _______,    _______,    KC_LALT,    _______,    _______,    _______,    _______,    _______,    KC_RALT,    KC_RCTL,    MO(FN),     _______,    _______,    _______
+        KC_LCTL,    _______,    KC_LALT,    _______,    _______,    _______,    _______,    _______,    _______,    KC_RALT,    KC_RCTL,    MO(FN),     _______,    _______,    _______
     ),
     [DIR] = LAYOUT_ortho_5x15(
         _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
