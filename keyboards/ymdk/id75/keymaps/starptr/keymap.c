@@ -222,7 +222,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         // Check if the unpressed key was the last gui key that was held
         if (win_gui_held_count == 0) {
-            win_gui_maybe_resolved = NULL;
+            // If win_gui is already held in the OS, we need to release it (eg. the alt is still held after alt-tab)
+            if (win_gui_maybe_resolved != NULL) {
+                unregister_code(*win_gui_maybe_resolved);
+                win_gui_maybe_resolved = NULL;
+            }
 
             if (timer_elapsed(win_gui_held_timer) < TAPPING_TERM) {
                 // The unpress was so soon after the press that it counts as a tap
