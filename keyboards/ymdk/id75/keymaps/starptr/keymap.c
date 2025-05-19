@@ -36,21 +36,32 @@ enum layer_names {
 #define H_LALT_S LALT_T(KC_S)
 #define H_LSFT_F LSFT_T(KC_F)
 #define H_LCTL_A LCTL_T(KC_A)
+#define H_LGUI_F LGUI_T(KC_F)
 
 #define H_RSFT_SCLN RSFT_T(KC_SCLN)
 #define H_RCTL_L RCTL_T(KC_L)
 #define H_RCTL_J RCTL_T(KC_J)
 #define H_DIR_K LT(DIR, KC_K)
-#define H_ALTSLSH RALT_T(KC_SLSH)
-#define H_ALTL RALT_T(KC_L)
-#define H_SFTJ RSFT_T(KC_J)
-#define H_CTLSCLN RCTL_T(KC_SCLN)
+#define H_RALT_SLSH RALT_T(KC_SLSH)
+#define H_RALT_L RALT_T(KC_L)
+#define H_RSFT_J RSFT_T(KC_J)
+#define H_RCTL_SCLN RCTL_T(KC_SCLN)
+#define H_RGUI_J RGUI_T(KC_J)
 
 #define ALTRIGHT LALT(KC_RIGHT)
 #define ALTLEFT  LALT(KC_LEFT)
 
 enum custom_keys {
   WINMAC = SAFE_RANGE, // swap win & mac layers
+  // On macos, the LGUI and RGUI keys are just the command keys. They should be next to the space keys for easy access.
+  // On windows, both the ALT and GUI keys are not very useful next to the space keys. So, we use these custom keys that behave differently in
+  // certain cases.
+  // These keys will behave in the following way:
+  // 1. If tapped, will send GUI
+  // 2. If held, will hold CTL
+  // 3. If held for tab or space, will hold ALT
+  WIN_L,
+  WIN_R,
   VALAFK,
 };
 
@@ -75,17 +86,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
         KC_GRV,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       KC_MINS,    KC_EQL,     KC_BSPC,    _______ ,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,    _______ ,
-        KC_CAPS,    H_LSFT_A,   H_LALT_S,   H_DIR_D,    H_LCTL_F,   KC_G,       KC_H,       H_RCTL_J,   H_DIR_K,    H_ALTL,     H_RSFT_SCLN,KC_QUOT,    KC_ENT,     _______,    _______ ,
+        KC_CAPS,    H_LSFT_A,   H_LALT_S,   H_DIR_D,    H_LCTL_F,   KC_G,       KC_H,       H_RCTL_J,   H_DIR_K,    H_RALT_L,   H_RSFT_SCLN,KC_QUOT,    KC_ENT,     _______,    _______ ,
         _______,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,    _______,    _______,    KC_UP,      _______ ,
         _______,    KC_ESC,     TG(STENO),  KC_LGUI,    KC_SPC,     KC_SPC,     KC_BSPC,    KC_SPC,     KC_RGUI,    _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
     ),
     [BASE_WINDOWS] = LAYOUT_ortho_5x15(
+    // Semantically, this layer "modifies" the [BASE] layer for Windows.
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
         _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
         _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
-        _______,    _______,    _______,    _______,    H_LGUIF,    _______,    _______,    H_RGUIJ,     _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
+        _______,    _______,    _______,    _______,    H_LGUI_F,   _______,    _______,    H_RGUI_J,   _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
         _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______ ,
-        _______,    _______,    _______,    KC_LGUI,    _______,    _______,    _______,    _______,    KC_RGUI,    _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
+        _______,    _______,    _______,    WIN_L,      _______,    _______,    _______,    _______,    WIN_R,      _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
     ),
 	[NO_TAP_HOLD] = LAYOUT_ortho_5x15(
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
@@ -121,12 +133,130 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 typedef enum {
+    STYLE_MACOS,
     STYLE_WINDOWS,
-    STYLE_MACOS
 } OSStyle;
-OSStyle current_style = STYLE_MACOS;
+void osstyle_toggle(OSStyle* state) {
+    if (*state == STYLE_MACOS) {
+        layer_on(BASE_WINDOWS)
+        *state = STYLE_WINDOWS;
+    } else {
+        layer_off(BASE_WINDOWS)
+        *state = STYLE_MACOS;
+    }
+}
 
+uint16_t gui_kc(bool is_left) {
+    if (is_left) {
+        return KC_LGUI;
+    }
+    return KC_RGUI;
+}
 
+uint16_t alt_kc(bool is_left) {
+    if (is_left) {
+        return KC_LALT;
+    }
+    return KC_RALT;
+}
+
+uint16_t ctl_kc(bool is_left) {
+    if (is_left) {
+        return KC_LCTL;
+    }
+    return KC_RCTL;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    static OSStyle current_style = STYLE_MACOS;
+    static int win_gui_held_count = 0;
+    static uint16_t win_gui_held_type = WIN_L; // When one of the gui keys are unpressed, we know it must be the other one that's held
+    static uint16_t win_gui_held_timer = 0;
+
+    switch (keycode) {
+    case WINMAC: {
+        // Set state
+        osstyle_toggle(&current_style);
+
+        // Don't process this key further
+        return false;
+    }
+    case WIN_L:
+    case WIN_R: {
+        // Check if key was pressed down
+        if (record->event.pressed) {
+            // The key that was just pressed down counts as the key that's held
+            if (keycode == WIN_L) {
+                win_gui_held_type = WIN_L;
+            } else {
+                win_gui_held_type = WIN_R;
+            }
+
+            win_gui_held_count++;
+
+            if (win_gui_held_count >= 2) {
+                // The gui key was pressed down again (probably by pressing both of them)
+                return false;
+            }
+            // The gui key was pressed down for the first time (i.e. the other gui key was not pressed down already)
+            win_gui_held_timer = timer_read();
+            return false;
+        }
+
+        // Key was unpressed
+        win_gui_held_count--;
+
+        // Check if the unpressed key was the last gui key that was held
+        if (win_gui_held_count == 0) {
+            if (timer_elapsed(win_gui_held_timer) < TAPPING_TERM) {
+                // The unpress was so soon after the press that it counts as a tap
+                tap_code(kc_gui(win_gui_held_type == WIN_L));
+                return false;
+            }
+            return false;
+        }
+
+        // There are still other gui keys that are held
+        // The key that wasn't just unpressed is the type of key that's still held
+        if (keycode == WIN_L) {
+            win_gui_held_type = WIN_R;
+        } else {
+            win_gui_held_type = WIN_L;
+        }
+
+        return false;
+    }
+    case KC_TAB:
+    case KC_SPC: {
+        if (win_gui_held_count == 0) {
+            // Not a special case we have to handle; just proceed as normal
+            return true;
+        }
+
+        if (record->event.pressed) {
+            register_code(alt_kc(win_gui_held_type == WIN_L));
+            return true; // Continue processing the key
+        }
+
+        unregister_code(alt_kc(win_gui_held_type == WIN_L));
+        return true; // Continue processing the key
+    }
+    default: {
+        if (win_gui_held_count == 0) {
+            // Not a special case we have to handle; just proceed as normal
+            return true;
+        }
+
+        if (record->event.pressed) {
+            register_code(ctl_kc(win_gui_held_type == WIN_L));
+            return true; // Continue processing the key
+        }
+
+        unregister_code(ctl_kc(win_gui_held_type == WIN_L));
+        return true;
+    }
+    }
+}
 
 #if defined(ENCODER_ENABLE) && defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
