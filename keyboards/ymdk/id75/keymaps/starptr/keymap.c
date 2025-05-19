@@ -28,19 +28,19 @@ enum layer_names {
 #define KC_MSNP LSFT(LGUI(KC_4))    // Mac snip tool
 
 // Home-row mods
-#define H_SFTA LSFT_T(KC_A)
-#define H_CTLS LCTL_T(KC_S)
-#define H_CTLF LCTL_T(KC_F)
-#define H_DIRD LT(DIR, KC_D)
-#define H_ALTZ LALT_T(KC_Z)
-#define H_ALTS LALT_T(KC_S)
-#define H_SFTF LSFT_T(KC_F)
-#define H_CTLA LCTL_T(KC_A)
+#define H_LSFT_A LSFT_T(KC_A)
+#define H_LCTL_S LCTL_T(KC_S)
+#define H_LCTL_F LCTL_T(KC_F)
+#define H_DIR_D LT(DIR, KC_D)
+#define H_LALT_Z LALT_T(KC_Z)
+#define H_LALT_S LALT_T(KC_S)
+#define H_LSFT_F LSFT_T(KC_F)
+#define H_LCTL_A LCTL_T(KC_A)
 
-#define H_SFTSCLN RSFT_T(KC_SCLN)
-#define H_CTLL RCTL_T(KC_L)
-#define H_CTLJ RCTL_T(KC_J)
-#define H_DIRK LT(DIR, KC_K)
+#define H_RSFT_SCLN RSFT_T(KC_SCLN)
+#define H_RCTL_L RCTL_T(KC_L)
+#define H_RCTL_J RCTL_T(KC_J)
+#define H_DIR_K LT(DIR, KC_K)
 #define H_ALTSLSH RALT_T(KC_SLSH)
 #define H_ALTL RALT_T(KC_L)
 #define H_SFTJ RSFT_T(KC_J)
@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14      */
         KC_GRV,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       KC_MINS,    KC_EQL,     KC_BSPC,    _______ ,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,    _______ ,
-        KC_CAPS,    H_SFTA,     H_ALTS,     H_DIRD,     H_CTLF,     KC_G,       KC_H,       H_CTLJ,     H_DIRK,     H_ALTL,     H_SFTSCLN,  KC_QUOT,    KC_ENT,     _______,    _______ ,
+        KC_CAPS,    H_LSFT_A,   H_LALT_S,   H_DIR_D,    H_LCTL_F,   KC_G,       KC_H,       H_RCTL_J,   H_DIR_K,    H_ALTL,     H_RSFT_SCLN,KC_QUOT,    KC_ENT,     _______,    _______ ,
         _______,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,    _______,    _______,    KC_UP,      _______ ,
         _______,    KC_ESC,     TG(STENO),  KC_LGUI,    KC_SPC,     KC_SPC,     KC_BSPC,    KC_SPC,     KC_RGUI,    _______,    _______,    MO(FN),     KC_LEFT,    KC_DOWN,    KC_RIGHT
     ),
