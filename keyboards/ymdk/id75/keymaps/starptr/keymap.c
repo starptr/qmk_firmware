@@ -138,10 +138,10 @@ typedef enum {
 } OSStyle;
 void osstyle_toggle(OSStyle* state) {
     if (*state == STYLE_MACOS) {
-        layer_on(BASE_WINDOWS)
+        layer_on(BASE_WINDOWS);
         *state = STYLE_WINDOWS;
     } else {
-        layer_off(BASE_WINDOWS)
+        layer_off(BASE_WINDOWS);
         *state = STYLE_MACOS;
     }
 }
@@ -210,7 +210,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (win_gui_held_count == 0) {
             if (timer_elapsed(win_gui_held_timer) < TAPPING_TERM) {
                 // The unpress was so soon after the press that it counts as a tap
-                tap_code(kc_gui(win_gui_held_type == WIN_L));
+                tap_code(gui_kc(win_gui_held_type == WIN_L));
                 return false;
             }
             return false;
