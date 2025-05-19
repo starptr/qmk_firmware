@@ -140,9 +140,13 @@ void osstyle_toggle(OSStyle* state) {
     if (*state == STYLE_MACOS) {
         layer_on(BASE_WINDOWS);
         *state = STYLE_WINDOWS;
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+        rgb_matrix_sethsv_noeeprom(142, 255, 239);
     } else {
         layer_off(BASE_WINDOWS);
         *state = STYLE_MACOS;
+        rgb_matrix_sethsv_noeeprom(0, 255, 255);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_ALL);
     }
 }
 
@@ -175,8 +179,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
     case WINMAC: {
-        // Set state
-        osstyle_toggle(&current_style);
+        if (record->event.pressed) {
+            // Set state
+            osstyle_toggle(&current_style);
+        }
 
         // Don't process this key further
         return false;
