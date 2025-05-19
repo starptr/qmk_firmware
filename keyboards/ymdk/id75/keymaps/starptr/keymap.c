@@ -175,10 +175,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static OSStyle current_style = STYLE_MACOS;
     static int win_gui_held_count = 0;
     static uint16_t win_gui_held_type = WIN_L; // When one of the gui keys are unpressed, we know it must be the other one that's held
+    static uint16_t win_gui_resolved_sticky = KC_LGUI; // After the gui key is pressed with another key, we know what the gui key should really be
+    static uint16_t* win_gui_maybe_resolved = NULL;
     static uint16_t win_gui_held_timer = 0;
 
     switch (keycode) {
     case WINMAC: {
+        // Reset the withheld state on enter/exit of windows style
+        if (win_gui_maybe_resolved != NULL) {
+            unregister_code(*win_gui_maybe_resolved);
+            win_gui_maybe_resolved = NULL;
+        }
+
         if (record->event.pressed) {
             // Set state
             osstyle_toggle(&current_style);
@@ -214,6 +222,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         // Check if the unpressed key was the last gui key that was held
         if (win_gui_held_count == 0) {
+            win_gui_maybe_resolved = NULL;
+
             if (timer_elapsed(win_gui_held_timer) < TAPPING_TERM) {
                 // The unpress was so soon after the press that it counts as a tap
                 tap_code(gui_kc(win_gui_held_type == WIN_L));
@@ -240,11 +250,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
 
         if (record->event.pressed) {
-            register_code(alt_kc(win_gui_held_type == WIN_L));
+            // Check if win_gui is already held in the OS (eg. the ctrl is held after ctrl-c)
+            if (win_gui_maybe_resolved != NULL) {
+                // If the already-held-in-the-OS state is ALT, we don't need to do anything in process_record_user; just continue processing the key
+                if (*win_gui_maybe_resolved == KC_LALT || *win_gui_maybe_resolved == KC_RALT) {
+                    return true;
+                }
+                unregister_code(*win_gui_maybe_resolved);
+                win_gui_maybe_resolved = NULL;
+            }
+
+            uint16_t kc_alt = alt_kc(win_gui_held_type == WIN_L);
+            win_gui_resolved_sticky = kc_alt;
+            win_gui_maybe_resolved = &win_gui_resolved_sticky;
+            register_code(*win_gui_maybe_resolved);
             return true; // Continue processing the key
         }
 
-        unregister_code(alt_kc(win_gui_held_type == WIN_L));
         return true; // Continue processing the key
     }
     default: {
@@ -254,11 +276,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
 
         if (record->event.pressed) {
-            register_code(ctl_kc(win_gui_held_type == WIN_L));
+            // Check if win_gui is already held in the OS (eg. the alt is held after alt-tab)
+            if (win_gui_maybe_resolved != NULL) {
+                // If the already-held-in-the-OS state is CTL, we don't need to do anything in process_record_user; just continue processing the key
+                if (*win_gui_maybe_resolved == KC_LCTL || *win_gui_maybe_resolved == KC_RCTL) {
+                    return true;
+                }
+                unregister_code(*win_gui_maybe_resolved);
+                win_gui_maybe_resolved = NULL;
+            }
+
+            uint16_t kc_ctl = ctl_kc(win_gui_held_type == WIN_L);
+            win_gui_resolved_sticky = kc_ctl;
+            win_gui_maybe_resolved = &win_gui_resolved_sticky;
+            register_code(*win_gui_maybe_resolved);
             return true; // Continue processing the key
         }
 
-        unregister_code(ctl_kc(win_gui_held_type == WIN_L));
         return true;
     }
     }
